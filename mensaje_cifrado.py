@@ -53,7 +53,8 @@ LLAVE_PUBLICA_FELIPE_FILE = "llave_publica_Felipe.pem"
 
 FIRMA_FILE_DIEGO = "Signature_Diego.sig"
 FIRMA_FILE_FELIPE = "Signature_Felipe.sig"
-TEXTO_CIFRADO_FILE = "texto_cifrado.txt"
+TEXTO_CIFRADO_DIEGO = "texto_cifrado_de_Diego.txt"
+TEXTO_CIFRADO_FELIPE = "texto_cifrado_de_Felipe.txt"
 IV_FILE = "IV.iv"
 LLAVE_AES_CIFRADA_FILE = "llave_AES_cifrada.key"
 
@@ -101,7 +102,11 @@ ENCRYPTOR = cipher.encryptor()
 texto_plano_padder = sym_padding.PKCS7(128).padder()
 texto_plano_padded = texto_plano_padder.update(texto_plano.encode()) + texto_plano_padder.finalize()
 texto_cifrado = ENCRYPTOR.update(texto_plano_padded) + ENCRYPTOR.finalize()
-escribir_archivo(TEXTO_CIFRADO_FILE, texto_cifrado)
+
+if USUARIO == 1:
+    escribir_archivo(TEXTO_CIFRADO_DIEGO, texto_cifrado)
+elif USUARIO == 2:
+    escribir_archivo(TEXTO_CIFRADO_FELIPE, texto_cifrado)
 escribir_archivo(IV_FILE, iv)
 
 if USUARIO == 1:

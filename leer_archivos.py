@@ -32,12 +32,12 @@ def leer_archivo(archivo):
         data = file.read()
     return data
 
-def desencriptar_llave_aes(aes_key, felipe_priv_key):
-    """Función para desencriptar la llave AES cifrada con la llave privada de Felipe"""
+def desencriptar_llave_aes(aes_key, private_key):
+    """Función para desencriptar la llave AES cifrada con la llave privada"""
     print("Desencriptando la llave AES...")
-    llave_privada_felipe = cargar_llave_privada(felipe_priv_key)
+    llave_privada = cargar_llave_privada(private_key)
     llave_aes_cifrada = leer_archivo(aes_key)
-    aes_key = llave_privada_felipe.decrypt(
+    aes_key = llave_privada.decrypt(
         llave_aes_cifrada,
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -90,7 +90,8 @@ LLAVE_PRIVADA_FELIPE_FILE = "llave_privada_Felipe.pem"
 LLAVE_PUBLICA_FELIPE_FILE = "llave_publica_Felipe.pem"
 FIRMA_FILE_DIEGO = "Signature_Diego.sig"
 FIRMA_FILE_FELIPE = "Signature_Felipe.sig"
-TEXTO_CIFRADO_FILE = "texto_cifrado.txt"
+TEXTO_CIFRADO_DIEGO = "texto_cifrado_de_Diego.txt"
+TEXTO_CIFRADO_FELIPE = "texto_cifrado_de_Felipe.txt"
 IV_FILE = "IV.iv"
 LLAVE_AES_CIFRADA_FILE = "llave_AES_cifrada.key"
 
@@ -106,7 +107,10 @@ except SystemExit:
     sys.exit()
 
 # Desencriptar el texto cifrado
-texto_plano = desencriptar_texto_cifrado(TEXTO_CIFRADO_FILE, IV_FILE, llave_aes)
+if USUARIO==1:
+    texto_plano = desencriptar_texto_cifrado(TEXTO_CIFRADO_FELIPE, IV_FILE, llave_aes)
+else:
+    texto_plano = desencriptar_texto_cifrado(TEXTO_CIFRADO_DIEGO, IV_FILE, llave_aes)
 print("Texto cifrado desencriptado:", texto_plano)
 
 # Verificar la firma digital del mensaje
