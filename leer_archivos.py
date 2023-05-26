@@ -85,25 +85,46 @@ def verificar_firma(texto_plano, firma_file, llave_publica_diego_file):
     except:
         return False
 
+usuario = 0
+#Identificar usuario
+while(usuario<1 or usuario>2):
+    usuario = int(input("Que usuario es?\n1.Diego\n2.Felipe\n"))
+
 # Rutas de los archivos
+llave_privada_diego_file = "llave_privada_Diego.pem"
+llave_publica_diego_file = "llave_publica_Diego.pem"
+llave_privada_felipe_file = "llave_privada_Felipe.pem"
+llave_publica_felipe_file = "llave_publica_Felipe.pem"
+firma_file_Diego = "Signature_Diego.sig"
+firma_file_Felipe = "Signature_Felipe.sig"
 texto_cifrado_file = "texto_cifrado.txt"
 iv_file = "IV.iv"
 llave_aes_cifrada_file = "llave_AES_cifrada.key"
-llave_publica_diego_file = "llave_publica_Diego.pem"
-llave_privada_felipe_file = "llave_privada_Felipe.pem"
-mensaje_file = "texto_cifrado.txt"
-firma_file = "Signature_Diego.sig"
 
 # Desencriptar la llave AES
-llave_aes = desencriptar_llave_aes(llave_aes_cifrada_file, llave_privada_felipe_file)
-print("Llave AES desencriptada.")
+try:
+    if(usuario == 1):
+        llave_aes = desencriptar_llave_aes(llave_aes_cifrada_file, llave_privada_diego_file)
+    
+    else:
+        llave_aes = desencriptar_llave_aes(llave_aes_cifrada_file, llave_privada_felipe_file)
+    print("Llave AES desencriptada.")
+except:
+    print("ESTE MENSAJE NO ES PARA USTED, LE INVITO CORDIALMENTE A RETIRARSE")
+    exit()
+
+
 
 # Desencriptar el texto cifrado
 texto_plano = desencriptar_texto_cifrado(texto_cifrado_file, iv_file, llave_aes)
 print("Texto cifrado desencriptado:", texto_plano)
 
 # Verificar la firma digital del mensaje
-verificado = verificar_firma(texto_plano, firma_file, llave_publica_diego_file)
+if(usuario==1):
+    verificado = verificar_firma(texto_plano, firma_file_Felipe, llave_publica_felipe_file)
+else:
+    verificado = verificar_firma(texto_plano, firma_file_Diego, llave_publica_diego_file)
+
 if verificado:
     print("La firma digital es válida. El mensaje no ha sido modificado.")
 else:

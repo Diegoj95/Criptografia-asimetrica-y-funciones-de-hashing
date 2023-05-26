@@ -14,6 +14,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding as sym_padding
 from cryptography.hazmat.backends import default_backend
 
+
 # Función para leer una clave pública desde un archivo
 def cargar_llave_publica(archivo):
     with open(archivo, "rb") as key_file:
@@ -44,13 +45,24 @@ def leer_archivo(filename):
         data = file.read()
     return data
 
+usuario = 0
+#Ingresar usuario
+while(usuario<1 or usuario>2):
+    usuario = int(input("Que usuario es?\n1.Diego\n2.Felipe\n"))
+   
+
 # Solicitar texto desde teclado a Diego
 texto_plano = input("Ingresa el texto a cifrar: ")
 
 # Rutas de los archivos
 llave_privada_diego_file = "llave_privada_Diego.pem"
+llave_publica_diego_file = "llave_publica_Diego.pem"
+
+llave_privada_felipe_file = "llave_privada_Felipe.pem"
 llave_publica_felipe_file = "llave_publica_Felipe.pem"
-firma_file = "Signature_Diego.sig"
+
+firma_file_Diego = "Signature_Diego.sig"
+firma_file_Felipe = "Signature_Felipe.sig"
 texto_cifrado_file = "texto_cifrado.txt"
 iv_file = "IV.iv"
 llave_aes_cifrada_file = "llave_AES_cifrada.key"
@@ -58,19 +70,36 @@ llave_aes_cifrada_file = "llave_AES_cifrada.key"
 # Leer llave privada de Diego
 llave_privada_diego = cargar_llave_privada(llave_privada_diego_file)
 
+# Leer llave pública de Diego
+llave_publica_diego = cargar_llave_publica(llave_publica_diego_file)
+
+# Leer llave privada de Felipe
+llave_privada_felipe = cargar_llave_privada(llave_privada_felipe_file)
+
 # Leer llave pública de Felipe
 llave_publica_felipe = cargar_llave_publica(llave_publica_felipe_file)
 
-# Firmar texto plano con llave privada de Diego
-firma = llave_privada_diego.sign(
+# Firmar texto plano con llave privada de correspondiente
+if(usuario == 1):
+    firma = llave_privada_diego.sign(
     texto_plano.encode(),
     padding.PSS(
         mgf=padding.MGF1(hashes.SHA256()),
         salt_length=padding.PSS.MAX_LENGTH
     ),
     hashes.SHA256()
-)
-escribir_archivo(firma_file, firma)
+    )
+    escribir_archivo(firma_file_Diego, firma)
+elif(usuario ==2):
+    firma = llave_privada_felipe.sign(
+    texto_plano.encode(),
+    padding.PSS(
+        mgf=padding.MGF1(hashes.SHA256()),
+        salt_length=padding.PSS.MAX_LENGTH
+    ),
+    hashes.SHA256()
+    )
+    escribir_archivo(firma_file_Felipe, firma)
 
 # Generar una llave AES y cifrar texto plano en modo CBC con AES
 llave_aes = os.urandom(32)
@@ -83,13 +112,19 @@ texto_cifrado = encryptor.update(texto_plano_padded) + encryptor.finalize()
 escribir_archivo(texto_cifrado_file, texto_cifrado)
 escribir_archivo(iv_file, iv)
 
-# Cifrar la llave AES con llave pública de Felipe
-llave_aes_cifrada = llave_publica_felipe.encrypt(
-llave_aes, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(), label=None))
-escribir_archivo(llave_aes_cifrada_file, llave_aes_cifrada)
+if(usuario == 1):
+    # Cifrar la llave AES con llave pública de Diego
+    llave_aes_cifrada = llave_publica_felipe.encrypt(
+    llave_aes, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(), label=None))
+    escribir_archivo(llave_aes_cifrada_file, llave_aes_cifrada)
+elif(usuario == 2):
+    # Cifrar la llave AES con llave pública de Felipe
+    llave_aes_cifrada = llave_publica_diego.encrypt(
+    llave_aes, padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),algorithm=hashes.SHA256(), label=None))
+    escribir_archivo(llave_aes_cifrada_file, llave_aes_cifrada)
+
 
 print("El mensaje ha sido cifrado y los archivos generados:")
-print("- Firma: {}".format(firma_file))
 print("- Texto cifrado: {}".format(texto_cifrado_file))
 print("- Vector IV: {}".format(iv_file))
 print("- Llave AES cifrada: {}".format(llave_aes_cifrada_file))
