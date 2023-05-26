@@ -57,14 +57,16 @@ TEXTO_CIFRADO_FILE = "texto_cifrado.txt"
 IV_FILE = "IV.iv"
 LLAVE_AES_CIFRADA_FILE = "llave_AES_cifrada.key"
 
-# Leer llave privada de Diego
-llave_privada_diego = cargar_llave_privada(LLAVE_PRIVADA_DIEGO_FILE)
+if USUARIO == 1:
+    # Leer llave privada de Diego
+    llave_privada_diego = cargar_llave_privada(LLAVE_PRIVADA_DIEGO_FILE)
 
 # Leer llave pública de Diego
 llave_publica_diego = cargar_llave_publica(LLAVE_PUBLICA_DIEGO_FILE)
 
-# Leer llave privada de Felipe
-llave_privada_felipe = cargar_llave_privada(LLAVE_PRIVADA_FELIPE_FILE)
+if USUARIO == 2:
+    # Leer llave privada de Felipe
+    llave_privada_felipe = cargar_llave_privada(LLAVE_PRIVADA_FELIPE_FILE)
 
 # Leer llave pública de Felipe
 llave_publica_felipe = cargar_llave_publica(LLAVE_PUBLICA_FELIPE_FILE)
