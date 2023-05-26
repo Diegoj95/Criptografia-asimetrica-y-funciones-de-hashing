@@ -36,6 +36,7 @@ def leer_archivo(filename):
         data = file.read()
     return data
 
+
 USUARIO = 0
 #Ingresar usuario
 while(USUARIO<1 or USUARIO>2):
@@ -96,7 +97,12 @@ elif USUARIO ==2:
 
 # Generar una llave AES y cifrar texto plano en modo CBC con AES
 llave_aes = os.urandom(32)
-iv = os.urandom(16)
+
+if os.path.exists("IV.iv"):
+    print("El archivo IV.iv ya existe")
+    iv = leer_archivo(IV_FILE)
+else:
+    iv = os.urandom(16)
 cipher = Cipher(algorithms.AES(llave_aes), modes.CBC(iv), backend=default_backend())
 ENCRYPTOR = cipher.encryptor()
 texto_plano_padder = sym_padding.PKCS7(128).padder()
