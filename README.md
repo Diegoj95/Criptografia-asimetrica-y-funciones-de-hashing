@@ -11,7 +11,7 @@
 
 ## Descripción
 
-El [primer programa](#https://github.com/Diegoj95/Criptografia-asimetrica-y-funciones-de-hashing/blob/master/crear_llaves.py) debe crear un par de llaves asimétricas RSA para ambos integrantes del grupo.
+El [primer programa](https://github.com/Diegoj95/Criptografia-asimetrica-y-funciones-de-hashing/blob/master/crear_llaves.py) debe crear un par de llaves asimétricas RSA para ambos integrantes del grupo.
 Las parejas de llaves deben ser almacenadas en un archivo formato PEM y etiquetadas con el nombre de su dueño. Ejemplo: llave_privada_Alice.key y llave_publica_Alice. key (de manera equivalente para Bob)
 Intercambien los archivos que contienen sus llaves públicas.
 
