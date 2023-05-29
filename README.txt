@@ -1,14 +1,51 @@
-Desarrollado por:
-    Diego Jiménez Muñoz
-    Felipe Vásquez Araneda
+# Criptografia Asimetrica y funciones de hashing
 
-Ejecución:
-    REQUISITO: Para la ejecucion es necesario tener python 3
-    Para ejecutar cualquiera de estos scripts de python, hay que ejecutar el comando "python3 NOMBREARCHIVO.py" en la carpeta donde se ubica el script como tal.
+## Contenidos
+- [Criptografia Asimetrica y funciones de hashing](#Criptografia-asimetrica-y-funciones-de-hashing)
+  - [Contenidos](#contenidos)
+  - [Descripción](#Descripción)
+  - [Construido con](#Construido-con)
+  - [Instalación de librerias ](#Instalación de librerias )
+  - [Autores](#Autores)
+    
 
-    -Primero hay que ejecutar el arhivo "crear_llaves.py", por cada ejecucion reemplazará las llaves anteriores si siguen en el directorio.
-    -Para ejecutar "mensaje_cifrado.py" es necesario tener las llaves del remitente y la llave publica del destinatario.
-    -Para ejecutar "leer_archivos.py" es necesario tener la llave privada del destinatario,
-     la llave publica del remitente, su firma,el vector de inicialización y la llave AES.
+## Descripción
 
-Observación: La llave AES es solamente compatible con el ultimo mensaje generado por lo cual al usar leer_archivos.py podria producir error
+El primer programa (#crear_llaves.py) debe crear un par de llaves asimétricas RSA para ambos integrantes del grupo.
+Las parejas de llaves deben ser almacenadas en un archivo formato PEM y etiquetadas con el nombre de su dueño. Ejemplo: llave_privada_Alice.key y llave_publica_Alice. key (de manera equivalente para Bob)
+Intercambien los archivos que contienen sus llaves públicas.
+
+El segundo programa (#mensaje_cifrado.py) debe permitir que dos personas intercambien mensajes cifrados. Por simplicidad piense que usted es  Alice desee enviar un mensaje a su compañero Bob:
+1-Solicitar un texto desde teclado a Alice,
+2-Lee llave privada de Alice y llave pública de Bob
+3-Firma texto plano con llave privada de Alice. Escriba firma en un archivo  (Por ejemplo "Signature_Alice. sig")
+4-Genera una llave AES y cifra texto plano en modo CBC con AES (no cifre la firma) y escribe texto cifrado en un archivo. También escribe vector IV en un archivo (IV.iv)
+5-Cifra la llave AES con llave pública de Bob y almacena llave AES cifrada en otro archivo. (Ejemplo llave_AES_cifrada.key)
+
+Tercer programa (#leer_archivos.py) debe leer varios archivos: archivo del mensaje, archivo con la firma del mensaje  llave pública del emisor (Alice) del mensaje, vector de inicialización, llave privada del destino (Bob) y llave AES cifrada.
+Descifre llave AES cifrada con llave privada de Bob
+Desencripte texto cifrado de Alice con llave AES
+Verifique que el mensaje es genuino y señala si la firma es válida. Genere un archivo de prueba distinto al mensaje original para probar esta situación.
+Solo si el mensaje es genuino, muestre el contenido del texto plano en pantalla
+
+
+## Construido con
+
+- Python
+
+## Instalación de librerias 
+
+```python
+python -m pip install --upgrade pip
+```
+```python
+pip install cryptography
+```
+```python
+pip install opencv-contrib-python
+```
+
+## Autores
+
+* Diego Jiménez Muñoz - diego.jimenez1901@alumnos.ubiobio.cl
+* Felipe Vásquez Araneda - felipe.vasquez1902@alumnos.ubiobio.cl
