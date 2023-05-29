@@ -10,3 +10,5 @@ Ejecución:
     -Para ejecutar "mensaje_cifrado.py" es necesario tener las llaves del remitente y la llave publica del destinatario.
     -Para ejecutar "leer_archivos.py" es necesario tener la llave privada del destinatario,
      la llave publica del remitente, su firma,el vector de inicialización y la llave AES.
+
+Observación: La llave AES es solamente compatible con el ultimo mensaje generado por lo cual al usar leer_archivos.py podria producir error
